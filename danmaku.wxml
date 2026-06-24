@@ -1,0 +1,132 @@
+<view class="page {{isFullscreen ? 'fullscreen-mode' : ''}}">
+
+  <!-- ============================================ -->
+  <!-- 预览区：撑满屏幕，逐字竖排滚动 -->
+  <!-- ============================================ -->
+  <view class="preview-area">
+    <view class="back-btn" bind:tap="onBack">
+      <text class="back-icon">←</text>
+      <text class="back-text">返回</text>
+    </view>
+    <view class="preview-box" style="background: {{bgColor}};">
+      <view
+        class="preview-column scroll-vertical {{isPaused ? 'paused' : ''}}"
+        style="animation-duration: {{marqueeDuration}};"
+      >
+        <text
+          wx:for="{{characters}}"
+          wx:key="index"
+          class="preview-char {{blink ? 'effect-blink' : ''}} {{led ? 'effect-led' : ''}} {{neon ? 'effect-neon' : ''}} {{rainbow ? 'effect-rainbow' : ''}} {{mirror ? 'effect-mirror' : ''}}"
+          style="--barrage-color: {{color}}; color: {{color}}; font-size: {{previewFontSize}}rpx;"
+        >{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ============================================ -->
+  <!-- 设置面板（点击输入栏展开） -->
+  <!-- ============================================ -->
+  <view class="settings-panel {{showSettings ? 'settings-panel--open' : ''}}">
+    <view class="settings-inner">
+      <!-- 快捷短语 -->
+      <view class="quick-tags">
+        <view
+          class="tag"
+          wx:for="{{shortcuts}}"
+          wx:key="*this"
+          data-text="{{item}}"
+          bind:tap="onShortcut"
+        >{{item}}</view>
+      </view>
+
+      <!-- 颜色圆点 + 随机 -->
+      <view class="color-row">
+        <view
+          class="color-dot {{item === color ? 'active' : ''}}"
+          wx:for="{{colorPresets}}"
+          wx:key="*this"
+          data-color="{{item}}"
+          style="background: {{item}};"
+          bind:tap="onColor"
+        ></view>
+        <view class="color-more" bind:tap="onRandomStyle">🎲</view>
+      </view>
+
+      <!-- 特效标签 -->
+      <view class="effects">
+        <view class="effect-tag {{led ? 'on' : ''}}" bind:tap="onToggleLed">LED</view>
+        <view class="effect-tag {{neon ? 'on' : ''}}" bind:tap="onToggleNeon">霓虹</view>
+        <view class="effect-tag {{rainbow ? 'on' : ''}}" bind:tap="onToggleRainbow">彩虹</view>
+        <view class="effect-tag {{blink ? 'on' : ''}}" bind:tap="onToggleBlink">闪烁</view>
+        <view class="effect-tag {{mirror ? 'on' : ''}}" bind:tap="onToggleMirror">镜像</view>
+        <view class="effect-tag {{isPaused ? 'on' : ''}}" bind:tap="onTogglePause">⏸ 静止</view>
+        <view class="effect-tag" bind:tap="onSwitchDirection">{{direction === 'left' ? '←' : '→'}}</view>
+      </view>
+
+      <!-- 滑块：字体大小 + 速度 -->
+      <view class="sliders">
+        <view class="slider-item">
+          <text class="slider-label">大小</text>
+          <slider class="slider" min="300" max="800" value="{{fontSize}}" block-size="16" activeColor="#6b38d4" bindchange="onFontSizeChange"/>
+          <text class="slider-value">{{fontSize}}</text>
+        </view>
+        <view class="slider-item">
+          <text class="slider-label">速度</text>
+          <slider class="slider" min="4" max="20" value="{{speed}}" block-size="16" activeColor="#6b38d4" bindchange="onSpeedChange"/>
+          <text class="slider-value">{{speedLabel}}</text>
+        </view>
+      </view>
+
+      <!-- 预设主题 -->
+      <view class="preset-row">
+        <text class="preset-label">主题：</text>
+        <view
+          class="preset-chip"
+          wx:for="{{presetThemes}}"
+          wx:key="name"
+          data-index="{{index}}"
+          style="color: {{item.textColor}}; background: {{item.bgColor}};"
+          bind:tap="onApplyPreset"
+        >{{item.name}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ============================================ -->
+  <!-- 底部输入栏 -->
+  <!-- ============================================ -->
+  <view class="bottom-bar" style="background: {{bgColor}};">
+    <view class="settings-toggle" bind:tap="onToggleSettings">
+      <text class="settings-toggle-icon">{{showSettings ? '✕' : '⚙'}}</text>
+    </view>
+    <view class="input-wrap">
+      <input
+        class="text-input"
+        value="{{inputValue}}"
+        placeholder="输入弹幕文字…"
+        bindinput="onInput"
+        bindfocus="onFocusInput"
+        confirm-type="send"
+        bindconfirm="onSend"
+        maxlength="30"
+      />
+    </view>
+    <view class="send-btn" bind:tap="onSend">
+      <text class="send-icon">▶</text>
+    </view>
+  </view>
+
+  <!-- ============================================ -->
+  <!-- 全屏舞台 -->
+  <!-- ============================================ -->
+  <view wx:if="{{isFullscreen}}" class="stage-fullscreen" style="background: {{bgColor}};" bind:tap="onStageTap">
+    <view class="stage-column {{isPaused ? 'paused' : ''}}" style="animation-duration: {{marqueeDuration}};">
+      <text
+        wx:for="{{characters}}"
+        wx:key="index"
+        class="stage-char {{blink ? 'effect-blink' : ''}} {{led ? 'effect-led' : ''}} {{neon ? 'effect-neon' : ''}} {{rainbow ? 'effect-rainbow' : ''}} {{mirror ? 'effect-mirror' : ''}}"
+        style="--barrage-color: {{color}}; color: {{color}}; font-size: {{fontSize}}rpx;"
+      >{{item}}</text>
+    </view>
+  </view>
+</view>

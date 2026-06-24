@@ -1,0 +1,474 @@
+// ============================================
+// 微信小程序弹幕组件 - 样式文件
+// ============================================
+
+// --- 设计变量（已内联，无需外部依赖）---
+@color-primary: #6b38d4;
+@color-background: #faf9f6;
+@spacing-md: 24px;
+
+.bouncy-tap() {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  &:active {
+    transform: scale(0.92);
+  }
+}
+
+// ========== 页面容器 ================================
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: @color-background;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+// ========== 返回按钮（浮在预览区左上角）==============
+.back-btn {
+  position: absolute;
+  top: 52px;
+  left: 16px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px 6px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.back-btn:active {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.back-icon {
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.back-text {
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+// 全屏时隐藏一切
+.fullscreen-mode .preview-area,
+.fullscreen-mode .settings-panel,
+.fullscreen-mode .bottom-bar {
+  display: none;
+}
+
+// ========== 预览区：撑满剩余空间 ====================
+.preview-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  min-height: 0; // 允许flex子元素收缩
+  overflow: hidden;
+}
+
+.preview-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+// ========== 预览区：逐字竖排，从底部升入 ============
+.preview-column {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 100vh);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  will-change: transform;
+}
+
+.preview-char {
+  display: block;
+  font-weight: 950;
+  line-height: 1.05;
+  font-family: Impact, "Arial Black", "PingFang SC", sans-serif;
+  transform: rotate(90deg);
+  will-change: opacity, filter, background-position, transform;
+}
+
+// 竖向动画（预览区）
+.scroll-vertical {
+  animation-name: scrollCharsVertical;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes scrollCharsVertical {
+  from { transform: translate(-50%, 100vh); }
+  to   { transform: translate(-50%, -100%); }
+}
+
+// 全屏时保留左右方向切换
+.scroll-left {
+  animation-name: scrollLeft;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.scroll-right {
+  animation-name: scrollRight;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+// ========== 设置面板（底部弹出）=====================
+.settings-panel {
+  max-height: 0;
+  overflow: hidden;
+  background: #1a1a2e;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &--open {
+    max-height: 420px;
+  }
+}
+
+.settings-inner {
+  padding: 14px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #1a1a2e;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+// 快捷短语
+.quick-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(107, 56, 212, 0.1);
+  color: @color-primary;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tag:active {
+  transform: scale(0.93);
+}
+
+// 颜色圆点
+.color-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.color-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.color-dot.active {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 3px rgba(107, 56, 212, 0.3);
+}
+
+.color-more {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+// 特效标签
+.effects {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.effect-tag {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.effect-tag.on {
+  color: @color-primary;
+  background: rgba(107, 56, 212, 0.15);
+}
+
+.effect-tag:active {
+  transform: scale(0.93);
+}
+
+// 滑块
+.sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.slider-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slider-label {
+  width: 36px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  flex-shrink: 0;
+}
+
+.slider {
+  flex: 1;
+}
+
+.slider-value {
+  width: 36px;
+  font-size: 12px;
+  font-weight: 600;
+  color: @color-primary;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+// 预设主题
+.preset-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.preset-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.preset-chip {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.preset-chip:active {
+  transform: scale(0.93);
+}
+
+// ========== 底部输入栏 ==============================
+.bottom-bar {
+  position: relative;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.settings-toggle-icon {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.input-wrap {
+  flex: 1;
+}
+
+.text-input {
+  width: 100%;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 0 14px;
+  font-size: 14px;
+  color: #ffffff;
+  box-sizing: border-box;
+}
+
+.text-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.send-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: @color-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(107, 56, 212, 0.3);
+}
+
+.send-btn:active {
+  transform: scale(0.92);
+}
+
+.send-icon {
+  color: #fff;
+  font-size: 14px;
+}
+
+// ========== 暂停状态 ================================
+.paused {
+  animation-play-state: paused !important;
+}
+
+// ========== 特效样式 ================================
+.effect-blink {
+  animation-name: blinkPulse;
+  animation-duration: 0.8s;
+  animation-timing-function: steps(2, end);
+  animation-iteration-count: infinite;
+}
+
+.effect-neon {
+  text-shadow:
+    0 0 4px currentColor,
+    0 0 9px currentColor,
+    0 0 17px currentColor,
+    0 0 29px currentColor;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.55);
+}
+
+.effect-led {
+  text-shadow: 0 0 3px currentColor, 4px 0 0 rgba(255, 255, 255, 0.08), -4px 0 0 rgba(255, 255, 255, 0.08);
+  background-image: radial-gradient(circle, var(--barrage-color, #39ff14) 0 46%, transparent 49%);
+  background-size: 6px 6px;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 6px var(--barrage-color, #39ff14));
+
+  &.effect-neon {
+    text-shadow: 0 0 3px currentColor, 4px 0 0 rgba(255, 255, 255, 0.08), -4px 0 0 rgba(255, 255, 255, 0.08);
+  }
+}
+
+.effect-rainbow {
+  background-image: linear-gradient(90deg, #ff3131, #ff9f1c, #ffe66d, #39ff14, #38d5ff, #b026ff, #ff4fd8, #ff3131);
+  background-size: 300% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation-name: rainbowMove;
+  animation-duration: 2.4s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.effect-mirror {
+  transform: scaleX(-1);
+}
+
+// ========== 全屏舞台 ================================
+.stage-fullscreen {
+  display: flex;
+  position: fixed;
+  z-index: 99;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.stage-column {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 100vh);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  will-change: transform;
+  animation-name: scrollCharsVertical;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.stage-char {
+  display: block;
+  font-weight: 950;
+  line-height: 1.05;
+  font-family: Impact, "Arial Black", "PingFang SC", sans-serif;
+  transform: rotate(90deg);
+  will-change: opacity, filter, background-position, transform;
+}
+
+// ========== Keyframes ===============================
+@keyframes scrollLeft {
+  from { transform: translate3d(100%, -50%, 0); }
+  to   { transform: translate3d(-120%, -50%, 0); }
+}
+
+@keyframes scrollRight {
+  from { transform: translate3d(-120%, -50%, 0); }
+  to   { transform: translate3d(100%, -50%, 0); }
+}
+
+@keyframes blinkPulse {
+  0%, 44%   { opacity: 1; }
+  45%, 70%  { opacity: 0.22; }
+  71%, 100% { opacity: 1; }
+}
+
+@keyframes rainbowMove {
+  from { background-position: 0% 50%; }
+  to   { background-position: 300% 50%; }
+}
+
+// ========== 横屏适配 ================================
+@media (orientation: landscape) {
+  .stage-fullscreen {
+    height: 100vh;
+  }
+
+  .stage-char {
+    font-size: 18vw !important;
+  }
+}
