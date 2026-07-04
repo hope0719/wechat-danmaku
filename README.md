@@ -1,5 +1,12 @@
 # 🎬 微信小程序弹幕 · WeChat Mini-Program Danmaku
 
+[![GitHub stars](https://img.shields.io/github/stars/hope0719/wechat-danmaku?style=social)](https://github.com/hope0719/wechat-danmaku/stargazers)
+
+If this project helps you, please consider giving it a ⭐ star!  
+如果本项目对你有帮助，欢迎点个 ⭐ Star 支持一下！
+
+
+
 > 微信弹幕、微信手持弹幕、微信应援弹幕、微信小程序弹幕组件 —— 一个适用于**微信小程序**的开源弹幕/手持弹幕/应援打 Call 组件。
 
 如果你正在找「微信弹幕怎么做」「微信小程序弹幕组件」「手持弹幕小程序源码」「微信应援弹幕」「演唱会弹幕小程序」，这个项目就是为你准备的。
